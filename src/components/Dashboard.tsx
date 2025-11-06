@@ -1,30 +1,31 @@
-import { useAuth } from "../contexts/AuthContext";
+import { useState } from "react";
 import * as S from "../styles/Dashboard";
-import { LayoutDashboard } from "lucide-react";
+import Header from "./Header";
+import WritePost from "./WritePost";
+import Board from "./Board";
+import Chart from "./Chart";
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const [activeTab, setActiveTab] = useState("board");
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "write":
+        return <WritePost />;
+      case "board":
+        return <Board />;
+      case "chart":
+        return <Chart />;
+      default:
+        return <Board />;
+    }
+  };
+
   return (
     <S.AppContainer>
-      <S.AppHeader>
-        <S.Title>
-          Directional
-          <S.IconWrapper>
-            <LayoutDashboard />
-          </S.IconWrapper>
-        </S.Title>
-        <S.UserSection>
-          <S.UserInfo>
-            <S.UserInfoText>
-              <strong>{user?.email}</strong>
-            </S.UserInfoText>
-            <S.UserInfoText>ID: {user?.id}</S.UserInfoText>
-          </S.UserInfo>
-          <S.LogoutButton onClick={logout}>로그아웃</S.LogoutButton>
-        </S.UserSection>
-      </S.AppHeader>
+      <Header activeTab={activeTab} onTabChange={setActiveTab} />
       <S.AppMain>
-        <S.Card></S.Card>
+        <S.Card>{renderContent()}</S.Card>
       </S.AppMain>
     </S.AppContainer>
   );

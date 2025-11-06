@@ -1,0 +1,28 @@
+import styled from "styled-components";
+
+const Container = styled.div`
+  color: #ffffff;
+  padding: 40px 20px;
+  text-align: center;
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  margin-bottom: 20px;
+`;
+
+const Description = styled.p`
+  color: #b0b0b0;
+  font-size: 16px;
+`;
+
+const WritePost = () => {
+  return (
+    <Container>
+      <Title>글 작성하기</Title>
+      <Description>게시글 작성 기능 추가 예정</Description>
+    </Container>
+  );
+};
+
+export default WritePost;

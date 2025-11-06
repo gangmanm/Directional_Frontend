@@ -1,0 +1,70 @@
+import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import * as S from "../styles/Header.ts";
+import { Menu } from "lucide-react";
+
+interface HeaderProps {
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+}
+
+const Header = ({ activeTab, onTabChange }: HeaderProps) => {
+  const { user, logout } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleMenuClick = (tab: string) => {
+    onTabChange(tab);
+    setIsMenuOpen(false);
+  };
+
+  return (
+    <S.HeaderContainer>
+      <S.HeaderContent>
+        <S.LeftSection>
+          <S.Logo>Directional</S.Logo>
+          <S.MenuIconButton
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            $isOpen={isMenuOpen}
+          >
+            <Menu />
+          </S.MenuIconButton>
+
+          {isMenuOpen && (
+            <S.DropdownMenu>
+              <S.DropdownMenuItem
+                $active={activeTab === "write"}
+                onClick={() => handleMenuClick("write")}
+              >
+                글 작성하기
+              </S.DropdownMenuItem>
+              <S.DropdownMenuItem
+                $active={activeTab === "board"}
+                onClick={() => handleMenuClick("board")}
+              >
+                게시판 확인하기
+              </S.DropdownMenuItem>
+              <S.DropdownMenuItem
+                $active={activeTab === "chart"}
+                onClick={() => handleMenuClick("chart")}
+              >
+                차트보기
+              </S.DropdownMenuItem>
+            </S.DropdownMenu>
+          )}
+        </S.LeftSection>
+
+        <S.UserSection>
+          <S.UserInfo>
+            <S.UserInfoText>
+              <strong>{user?.email}</strong>
+            </S.UserInfoText>
+            <S.UserInfoText>ID: {user?.id}</S.UserInfoText>
+          </S.UserInfo>
+          <S.LogoutButton onClick={logout}>로그아웃</S.LogoutButton>
+        </S.UserSection>
+      </S.HeaderContent>
+    </S.HeaderContainer>
+  );
+};
+
+export default Header;
