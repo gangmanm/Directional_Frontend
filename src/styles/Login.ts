@@ -59,9 +59,9 @@ export const Label = styled.label`
   color: #b0b0b0;
 `;
 
-export const Input = styled.input`
+export const Input = styled.input<{ $isInvalid?: boolean }>`
   padding: 10px 14px;
-  border: 2px solid #2a2a2a;
+  border: 2px solid ${(props) => (props.$isInvalid ? "#ff4444" : "#2a2a2a")};
   border-radius: 8px;
   font-size: 16px;
   transition: all 0.3s ease;
@@ -78,8 +78,12 @@ export const Input = styled.input`
   }
 
   &:focus {
-    border-color: #ffffff;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    border-color: ${(props) => (props.$isInvalid ? "#ff4444" : "#ffffff")};
+    box-shadow: 0 0 0 3px
+      ${(props) =>
+        props.$isInvalid
+          ? "rgba(255, 68, 68, 0.1)"
+          : "rgba(255, 255, 255, 0.1)"};
   }
 
   &:disabled {
@@ -87,6 +91,12 @@ export const Input = styled.input`
     cursor: not-allowed;
     opacity: 0.5;
   }
+`;
+
+export const ValidationError = styled.span`
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-top: 4px;
 `;
 
 export const ErrorMessage = styled.div`

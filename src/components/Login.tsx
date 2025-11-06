@@ -2,17 +2,29 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import * as S from "../styles/Login";
 import { useAuth } from "../contexts/AuthContext";
+import { useEmailValidation } from "../hooks/useEmailValidation";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showEmailError, setShowEmailError] = useState(false);
   const { login } = useAuth();
+  const { isValid: isEmailValid, error: emailError } =
+    useEmailValidation(email);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setShowEmailError(true);
+
+    // 이메일 유효성 검사
+    if (!isEmailValid) {
+      setError(emailError || "올바른 이메일을 입력해주세요.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -49,13 +61,19 @@ const Login = () => {
               id="email"
               type="email"
               value={email}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)
-              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setEmail(e.target.value);
+                setShowEmailError(false);
+              }}
+              onBlur={() => setShowEmailError(true)}
               required
               placeholder="example@email.com"
               disabled={loading}
+              $isInvalid={showEmailError && !!email && !isEmailValid}
             />
+            {showEmailError && emailError && (
+              <S.ValidationError>{emailError}</S.ValidationError>
+            )}
           </S.FormGroup>
 
           <S.FormGroup>
