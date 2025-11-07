@@ -6,7 +6,7 @@ import * as S from "../styles/WritePost";
 import { X, Minus } from "lucide-react";
 
 interface WritePostProps {
-  onClose: () => void;
+  onClose: (shouldRefresh?: boolean) => void;
 }
 
 const WritePost = ({ onClose }: WritePostProps) => {
@@ -45,7 +45,7 @@ const WritePost = ({ onClose }: WritePostProps) => {
 
       setTimeout(() => {
         setSuccess(false);
-        onClose();
+        onClose(true);
       }, 1500);
     } catch (err) {
       const errorObj = err as {
@@ -80,7 +80,7 @@ const WritePost = ({ onClose }: WritePostProps) => {
           <S.IconButton onClick={() => setIsMinimized(!isMinimized)}>
             <Minus size={16} />
           </S.IconButton>
-          <S.IconButton onClick={onClose}>
+          <S.IconButton onClick={() => onClose()}>
             <X size={16} />
           </S.IconButton>
         </S.FloatingActions>
@@ -88,67 +88,67 @@ const WritePost = ({ onClose }: WritePostProps) => {
       {!isMinimized && (
         <S.FloatingContent>
           <S.Form onSubmit={handleSubmit}>
-        <S.FormGroup>
-          <S.Label htmlFor="title">제목</S.Label>
-          <S.Input
-            id="title"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="제목을 입력하세요"
-            required
-            disabled={loading}
-          />
-        </S.FormGroup>
+            <S.FormGroup>
+              <S.Label htmlFor="title">제목</S.Label>
+              <S.Input
+                id="title"
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="제목을 입력하세요"
+                required
+                disabled={loading}
+              />
+            </S.FormGroup>
 
-        <S.FormGroup>
-          <S.Label htmlFor="category">카테고리</S.Label>
-          <S.Select
-            id="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value as PostCategory)}
-            disabled={loading}
-          >
-            <option value="FREE">자유</option>
-            <option value="NOTICE">공지</option>
-            <option value="QNA">질문</option>
-          </S.Select>
-        </S.FormGroup>
+            <S.FormGroup>
+              <S.Label htmlFor="category">카테고리</S.Label>
+              <S.Select
+                id="category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value as PostCategory)}
+                disabled={loading}
+              >
+                <option value="FREE">자유</option>
+                <option value="NOTICE">공지</option>
+                <option value="QNA">질문</option>
+              </S.Select>
+            </S.FormGroup>
 
-        <S.FormGroup>
-          <S.Label htmlFor="tags">태그</S.Label>
-          <S.Input
-            id="tags"
-            type="text"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            placeholder="태그를 쉼표로 구분하여 입력하세요 (예: react, typescript)"
-            disabled={loading}
-          />
-        </S.FormGroup>
+            <S.FormGroup>
+              <S.Label htmlFor="tags">태그</S.Label>
+              <S.Input
+                id="tags"
+                type="text"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                placeholder="태그를 쉼표로 구분하여 입력하세요 (예: react, typescript)"
+                disabled={loading}
+              />
+            </S.FormGroup>
 
-        <S.FormGroup>
-          <S.Label htmlFor="body">내용</S.Label>
-          <S.Textarea
-            id="body"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            placeholder="내용을 입력하세요"
-            rows={10}
-            required
-            disabled={loading}
-          />
-        </S.FormGroup>
+            <S.FormGroup>
+              <S.Label htmlFor="body">내용</S.Label>
+              <S.Textarea
+                id="body"
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                placeholder="내용을 입력하세요"
+                rows={10}
+                required
+                disabled={loading}
+              />
+            </S.FormGroup>
 
-        {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
-        {success && (
-          <S.SuccessMessage>게시글이 작성되었습니다!</S.SuccessMessage>
-        )}
+            {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
+            {success && (
+              <S.SuccessMessage>게시글이 작성되었습니다!</S.SuccessMessage>
+            )}
 
-        <S.SubmitButton type="submit" disabled={loading}>
-          {loading ? "작성 중..." : "게시글 작성"}
-        </S.SubmitButton>
-      </S.Form>
+            <S.SubmitButton type="submit" disabled={loading}>
+              {loading ? "작성 중..." : "게시글 작성"}
+            </S.SubmitButton>
+          </S.Form>
         </S.FloatingContent>
       )}
     </S.FloatingContainer>
