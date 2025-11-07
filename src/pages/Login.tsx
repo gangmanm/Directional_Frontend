@@ -3,11 +3,12 @@ import type { FormEvent } from "react";
 import * as S from "../styles/Login";
 import { useAuth } from "../contexts/AuthContext";
 import { useEmailValidation } from "../hooks/useEmailValidation";
+import { useToast } from "../contexts/ToastContext";
 
 const Login = () => {
+  const { showError } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showEmailError, setShowEmailError] = useState(false);
   const { login } = useAuth();
@@ -16,12 +17,10 @@ const Login = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
     setShowEmailError(true);
 
-    // 이메일 유효성 검사
     if (!isEmailValid) {
-      setError(emailError || "올바른 이메일을 입력해주세요.");
+      showError(emailError || "올바른 이메일을 입력해주세요.");
       return;
     }
 
@@ -41,9 +40,9 @@ const Login = () => {
       const status = errorObj.response?.status;
 
       if (status === 400 || status === 401) {
-        setError("이메일 또는 비밀번호를 확인해주세요.");
+        showError("이메일 또는 비밀번호를 확인해주세요.");
       } else {
-        setError("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        showError("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");
       }
     } finally {
       setLoading(false);
@@ -88,8 +87,6 @@ const Login = () => {
               disabled={loading}
             />
           </S.FormGroup>
-
-          {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
 
           <S.LoginButton type="submit" disabled={loading}>
             {loading ? "로그인 중..." : "로그인"}
