@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import * as S from "../styles/Dashboard";
 import Header from "../components/Header";
 import WritePost from "../components/WritePost";
@@ -10,11 +11,22 @@ import { useToast } from "../contexts/ToastContext";
 
 const Dashboard = () => {
   const { showError } = useToast();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState("board");
   const [isWriteOpen, setIsWriteOpen] = useState(false);
   const [editingPost, setEditingPost] = useState<Post | undefined>(undefined);
   const [boardKey, setBoardKey] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === "/chart") {
+      setActiveTab("chart");
+    } else if (path === "/writings" || path === "/") {
+      setActiveTab("board");
+    }
+  }, [location.pathname]);
 
   const handleTabChange = (tab: string) => {
     if (tab === "write") {
@@ -25,6 +37,12 @@ const Dashboard = () => {
       setActiveTab(tab);
       setIsWriteOpen(false);
       setEditingPost(undefined);
+
+      if (tab === "chart") {
+        navigate("/chart");
+      } else if (tab === "board") {
+        navigate("/writings");
+      }
     }
   };
 
@@ -50,33 +68,34 @@ const Dashboard = () => {
     }
   };
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case "board":
-        return (
-          <Board
-            key={boardKey}
-            onTabChange={handleTabChange}
-            onEditPost={handleEditPost}
-          />
-        );
-      case "chart":
-        return <Chart />;
-      default:
-        return (
-          <Board
-            key={boardKey}
-            onTabChange={handleTabChange}
-            onEditPost={handleEditPost}
-          />
-        );
-    }
-  };
-
   return (
     <S.AppContainer>
       <Header activeTab={activeTab} onTabChange={handleTabChange} />
-      <S.AppMain>{renderContent()}</S.AppMain>
+      <S.AppMain>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Board
+                key={boardKey}
+                onTabChange={handleTabChange}
+                onEditPost={handleEditPost}
+              />
+            }
+          />
+          <Route
+            path="/writings"
+            element={
+              <Board
+                key={boardKey}
+                onTabChange={handleTabChange}
+                onEditPost={handleEditPost}
+              />
+            }
+          />
+          <Route path="/chart" element={<Chart />} />
+        </Routes>
+      </S.AppMain>
       {isWriteOpen && !loading && (
         <WritePost onClose={handleWriteClose} post={editingPost} />
       )}
