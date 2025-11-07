@@ -65,10 +65,15 @@ export const LogoImage = styled.img`
   width: 32px;
   height: 32px;
   display: block;
+  background-color: #ffffff;
+  padding: 6px;
+  border-radius: 8px;
 
   ${media.tablet} {
     width: 40px;
     height: 40px;
+    padding: 8px;
+    border-radius: 10px;
   }
 `;
 

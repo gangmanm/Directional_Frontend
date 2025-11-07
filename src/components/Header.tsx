@@ -21,16 +21,17 @@ const Header = ({ activeTab, onTabChange }: HeaderProps) => {
     <S.HeaderContainer>
       <S.HeaderContent>
         <S.LeftSection>
-          <S.Logo>
-            <S.LogoImage src="/logo.svg" alt="Directional Logo" />
-            Directional
-          </S.Logo>
           <S.MenuIconButton
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             $isOpen={isMenuOpen}
           >
             <Menu />
           </S.MenuIconButton>
+
+          <S.Logo>
+            Directional
+            <S.LogoImage src="/logo.svg" alt="Directional Logo" />
+          </S.Logo>
         </S.LeftSection>
 
         <S.UserSection>
