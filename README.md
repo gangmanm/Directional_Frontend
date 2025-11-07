@@ -1,6 +1,15 @@
 # Directional Frontend
 
-React와 TypeScript를 사용한 게시판 및 차트 대시보드 애플리케이션
+<div align="center">
+  <img src="./public/logo.svg" alt="Directional Logo" width="120" height="120" />
+  <h3>React와 TypeScript를 사용한 게시판 및 차트 대시보드 애플리케이션</h3>
+  
+  <p>
+    <a href="https://directional-frontend.vercel.app" target="_blank">
+      <strong>배포 사이트 주소</strong>
+    </a>
+  </p>
+</div>
 
 ## 📸 스크린샷
 
@@ -185,6 +194,12 @@ src/
 
 ## 실행 방법
 
+### 배포 사이트 주소
+
+🌐 **[https://directional-frontend.vercel.app](https://directional-frontend.vercel.app)**
+
+### 로컬 실행
+
 ```bash
 # 의존성 설치
 npm install
@@ -231,3 +246,10 @@ npm run preview
 - **타입 안정성** - TypeScript 엄격 모드
 - **사용자 경험** - 로딩/에러 상태 처리
 - **코드 품질** - ESLint, 일관된 코드 스타일
+
+## 배포
+
+이 프로젝트는 Vercel에 배포되어 있습니다.
+
+- **Production**: [https://directional-frontend.vercel.app](https://directional-frontend.vercel.app)
+- **자동 배포**: main 브랜치에 push 시 자동으로 배포됩니다.
