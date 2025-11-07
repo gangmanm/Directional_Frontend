@@ -27,7 +27,6 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // 로그인 API 요청이 아닐 때만 리다이렉트
       const isLoginRequest = error.config?.url?.includes("/auth/login");
 
       if (!isLoginRequest) {
@@ -40,4 +39,5 @@ apiClient.interceptors.response.use(
   }
 );
 
+export const api = apiClient;
 export default apiClient;
