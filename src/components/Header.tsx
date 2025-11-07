@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import * as S from "../styles/Header.ts";
-import { Menu } from "lucide-react";
+import * as S from "../styles/Header";
+import { LayoutDashboard, Menu } from "lucide-react";
 
 interface HeaderProps {
   activeTab: string;
@@ -21,36 +21,18 @@ const Header = ({ activeTab, onTabChange }: HeaderProps) => {
     <S.HeaderContainer>
       <S.HeaderContent>
         <S.LeftSection>
-          <S.Logo>Directional</S.Logo>
+          <S.Logo>
+            Directional
+            <S.IconWrapper>
+              <LayoutDashboard />
+            </S.IconWrapper>
+          </S.Logo>
           <S.MenuIconButton
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             $isOpen={isMenuOpen}
           >
             <Menu />
           </S.MenuIconButton>
-
-          {isMenuOpen && (
-            <S.DropdownMenu>
-              <S.DropdownMenuItem
-                $active={activeTab === "write"}
-                onClick={() => handleMenuClick("write")}
-              >
-                글 작성하기
-              </S.DropdownMenuItem>
-              <S.DropdownMenuItem
-                $active={activeTab === "board"}
-                onClick={() => handleMenuClick("board")}
-              >
-                게시판 확인하기
-              </S.DropdownMenuItem>
-              <S.DropdownMenuItem
-                $active={activeTab === "chart"}
-                onClick={() => handleMenuClick("chart")}
-              >
-                차트보기
-              </S.DropdownMenuItem>
-            </S.DropdownMenu>
-          )}
         </S.LeftSection>
 
         <S.UserSection>
@@ -63,6 +45,23 @@ const Header = ({ activeTab, onTabChange }: HeaderProps) => {
           <S.LogoutButton onClick={logout}>로그아웃</S.LogoutButton>
         </S.UserSection>
       </S.HeaderContent>
+
+      {isMenuOpen && (
+        <S.DropdownMenu>
+          <S.DropdownMenuItem
+            $active={activeTab === "board"}
+            onClick={() => handleMenuClick("board")}
+          >
+            게시글 확인하기
+          </S.DropdownMenuItem>
+          <S.DropdownMenuItem
+            $active={activeTab === "chart"}
+            onClick={() => handleMenuClick("chart")}
+          >
+            차트보기
+          </S.DropdownMenuItem>
+        </S.DropdownMenu>
+      )}
     </S.HeaderContainer>
   );
 };

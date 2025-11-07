@@ -14,13 +14,8 @@ export const fadeIn = keyframes`
 
 export const AppContainer = styled.div`
   min-height: 100vh;
-  background: #0a0a0a;
-  padding: 16px;
+  background: #000000;
   animation: ${fadeIn} 0.5s ease-out;
-
-  ${media.tablet} {
-    padding: 20px;
-  }
 `;
 
 export const AppMain = styled.main`

@@ -18,13 +18,13 @@ export const HeaderContainer = styled.header`
   border: 1px solid #2a2a2a;
   padding: 16px;
   max-width: 1200px;
-  margin: 0 auto 20px;
+  margin: 20px auto 20px;
   position: relative;
 
   ${media.tablet} {
     border-radius: 16px;
     padding: 20px 30px;
-    margin: 0 auto 30px;
+    margin: 30px auto 30px;
   }
 `;
 
