@@ -41,6 +41,73 @@ export const WriteButton = styled.button`
   }
 `;
 
+export const FilterSection = styled.div`
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+export const SearchContainer = styled.div`
+  display: flex;
+  gap: 12px;
+`;
+
+export const SearchInput = styled.input`
+  flex: 1;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #ffffff;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease;
+
+  &::placeholder {
+    color: #666666;
+  }
+
+  &:focus {
+    border-color: #ffffff;
+  }
+`;
+
+export const SearchButton = styled.button`
+  padding: 12px 20px;
+  background: #ffffff;
+  color: #0a0a0a;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+export const FilterRow = styled.div`
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+`;
+
+export const FilterGroup = styled.div`
+  flex: 1;
+  min-width: 150px;
+`;
+
 export const PostList = styled.div`
   display: flex;
   flex-direction: column;
@@ -117,13 +184,14 @@ export const PostFooter = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
 `;
 
 export const TagList = styled.div`
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  flex: 1;
 `;
 
 export const Tag = styled.span`
@@ -132,6 +200,24 @@ export const Tag = styled.span`
   border-radius: 4px;
   font-size: 12px;
   color: #999999;
+`;
+
+export const PostInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+`;
+
+export const AuthorId = styled.span`
+  font-size: 12px;
+  color: #b0b0b0;
+  font-weight: 500;
+`;
+
+export const Divider = styled.span`
+  font-size: 12px;
+  color: #666666;
 `;
 
 export const PostDate = styled.span`

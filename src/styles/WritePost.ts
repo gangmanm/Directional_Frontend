@@ -63,6 +63,50 @@ export const IconButton = styled.button`
   }
 `;
 
+export const HeaderSubmitButton = styled.button`
+  background: #ffffff;
+  color: #0a0a0a;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+export const HeaderDeleteButton = styled.button`
+  background: #ff6b6b;
+  color: #ffffff;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
 export const FloatingContent = styled.div`
   padding: 20px;
   overflow-y: auto;
@@ -169,39 +213,6 @@ export const Input = styled.input`
   }
 `;
 
-export const Select = styled.select`
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #333333;
-  border-radius: 0;
-  padding: 12px 0;
-  color: #ffffff;
-  font-size: 15px;
-  transition: border-color 0.2s ease;
-  outline: none;
-  cursor: pointer;
-  width: 100%;
-  box-sizing: border-box;
-
-  ${media.tablet} {
-    font-size: 16px;
-  }
-
-  &:focus {
-    border-bottom-color: #ffffff;
-  }
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-
-  option {
-    background: #0a0a0a;
-    color: #ffffff;
-  }
-`;
-
 export const Textarea = styled.textarea`
   background: transparent;
   border: 1px solid #333333;
@@ -258,6 +269,12 @@ export const SuccessMessage = styled.div`
   }
 `;
 
+export const ButtonRow = styled.div`
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+`;
+
 export const SubmitButton = styled.button`
   background: #ffffff;
   color: #0a0a0a;
@@ -269,8 +286,42 @@ export const SubmitButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
   transition: opacity 0.2s ease;
-  margin-top: 12px;
-  width: 100%;
+  flex: 1;
+  box-sizing: border-box;
+
+  ${media.tablet} {
+    padding: 18px 32px;
+    font-size: 16px;
+  }
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:active:not(:disabled) {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+`;
+
+export const DeleteButton = styled.button`
+  background: #ff6b6b;
+  color: #ffffff;
+  border: none;
+  padding: 16px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   box-sizing: border-box;
 
   ${media.tablet} {

@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { postsAPI } from "../api/posts";
-import type { Post } from "../types/post";
+import type { Post, PostCategory } from "../types/post";
 import * as S from "../styles/Board";
+import { Search } from "lucide-react";
+import Dropdown from "./Dropdown";
 
 interface BoardProps {
   onTabChange: (tab: string) => void;
+  onEditPost: (postId: string) => void;
 }
 
 const getCategoryLabel = (category: string) => {
@@ -36,7 +39,7 @@ const formatDate = (dateString: string) => {
   return date.toLocaleDateString("ko-KR");
 };
 
-const Board = ({ onTabChange }: BoardProps) => {
+const Board = ({ onTabChange, onEditPost }: BoardProps) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -46,6 +49,15 @@ const Board = ({ onTabChange }: BoardProps) => {
   const [visiblePosts, setVisiblePosts] = useState<Set<string>>(new Set());
   const observerRef = useRef<HTMLDivElement>(null);
   const postRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<PostCategory | "">(
+    ""
+  );
+  const [sortField, setSortField] = useState<"createdAt" | "title">(
+    "createdAt"
+  );
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const fetchPosts = async (cursor?: string, append = false) => {
     if (append) {
@@ -61,14 +73,24 @@ const Board = ({ onTabChange }: BoardProps) => {
         sort: string;
         order: string;
         nextCursor?: string;
+        search?: string;
+        category?: string;
       } = {
         limit: 10,
-        sort: "createdAt",
-        order: "desc",
+        sort: sortField,
+        order: sortOrder,
       };
 
       if (cursor) {
         params.nextCursor = cursor;
+      }
+
+      if (searchQuery.trim()) {
+        params.search = searchQuery.trim();
+      }
+
+      if (selectedCategory) {
+        params.category = selectedCategory;
       }
 
       const response = await postsAPI.getPosts(params);
@@ -90,16 +112,35 @@ const Board = ({ onTabChange }: BoardProps) => {
     }
   };
 
+  const handleSearch = () => {
+    window.scrollTo(0, 0);
+    setVisiblePosts(new Set());
+    fetchPosts();
+  };
+
+  const handleFilterChange = () => {
+    window.scrollTo(0, 0);
+    setVisiblePosts(new Set());
+    fetchPosts();
+  };
+
   const loadMore = useCallback(() => {
     if (nextCursor && !loadingMore && hasMore) {
       fetchPosts(nextCursor, true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextCursor, loadingMore, hasMore]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchPosts();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortField, sortOrder]);
+
+  useEffect(() => {
+    handleFilterChange();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -186,8 +227,70 @@ const Board = ({ onTabChange }: BoardProps) => {
         </S.WriteButton>
       </S.TitleRow>
 
+      <S.FilterSection>
+        <S.SearchContainer>
+          <S.SearchInput
+            type="text"
+            placeholder="제목 또는 내용 검색..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+          />
+          <S.SearchButton onClick={handleSearch}>
+            <Search size={18} />
+            검색
+          </S.SearchButton>
+        </S.SearchContainer>
+
+        <S.FilterRow>
+          <S.FilterGroup>
+            <Dropdown
+              label="카테고리"
+              value={selectedCategory}
+              onChange={(value) =>
+                setSelectedCategory(value as PostCategory | "")
+              }
+              options={[
+                { value: "", label: "전체" },
+                { value: "FREE", label: "자유" },
+                { value: "NOTICE", label: "공지" },
+                { value: "QNA", label: "질문" },
+              ]}
+            />
+          </S.FilterGroup>
+
+          <S.FilterGroup>
+            <Dropdown
+              label="정렬 기준"
+              value={sortField}
+              onChange={(value) => setSortField(value as "createdAt" | "title")}
+              options={[
+                { value: "createdAt", label: "작성일" },
+                { value: "title", label: "제목" },
+              ]}
+            />
+          </S.FilterGroup>
+
+          <S.FilterGroup>
+            <Dropdown
+              label="정렬 방향"
+              value={sortOrder}
+              onChange={(value) => setSortOrder(value as "asc" | "desc")}
+              options={[
+                { value: "desc", label: "내림차순" },
+                { value: "asc", label: "오름차순" },
+              ]}
+            />
+          </S.FilterGroup>
+        </S.FilterRow>
+      </S.FilterSection>
+
       {posts.length === 0 ? (
-        <S.EmptyMessage>아직 게시글이 없습니다.</S.EmptyMessage>
+        <S.EmptyMessage>
+          {searchQuery || selectedCategory
+            ? "검색 결과가 없습니다."
+            : "아직 게시글이 없습니다."}
+        </S.EmptyMessage>
       ) : (
         <>
           <S.PostList>
@@ -201,6 +304,7 @@ const Board = ({ onTabChange }: BoardProps) => {
                   }
                 }}
                 $isVisible={visiblePosts.has(post.id)}
+                onClick={() => onEditPost(post.id)}
               >
                 <S.PostHeader>
                   <S.PostTitle>{post.title}</S.PostTitle>
@@ -215,7 +319,11 @@ const Board = ({ onTabChange }: BoardProps) => {
                       <S.Tag key={index}>#{tag}</S.Tag>
                     ))}
                   </S.TagList>
-                  <S.PostDate>{formatDate(post.createdAt)}</S.PostDate>
+                  <S.PostInfo>
+                    <S.AuthorId>{post.userId}</S.AuthorId>
+                    <S.Divider>·</S.Divider>
+                    <S.PostDate>{formatDate(post.createdAt)}</S.PostDate>
+                  </S.PostInfo>
                 </S.PostFooter>
               </S.PostItem>
             ))}

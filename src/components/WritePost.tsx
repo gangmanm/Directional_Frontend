@@ -1,82 +1,64 @@
 import { useState } from "react";
-import type { FormEvent } from "react";
-import { postsAPI } from "../api/posts";
-import type { PostCategory } from "../types/post";
+import type { Post, PostCategory } from "../types/post";
 import * as S from "../styles/WritePost";
-import { X, Minus } from "lucide-react";
+import { X, Minus, Trash2, Check } from "lucide-react";
+import Dropdown from "./Dropdown";
+import { usePostForm } from "../hooks/usePostForm";
 
 interface WritePostProps {
   onClose: (shouldRefresh?: boolean) => void;
+  post?: Post;
 }
 
-const WritePost = ({ onClose }: WritePostProps) => {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [category, setCategory] = useState<PostCategory>("FREE");
-  const [tags, setTags] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError("");
-    setSuccess(false);
-    setLoading(true);
-
-    try {
-      const tagsArray = tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter((tag) => tag.length > 0);
-
-      await postsAPI.createPost({
-        title,
-        body,
-        category,
-        tags: tagsArray,
-      });
-
-      setSuccess(true);
-      setTitle("");
-      setBody("");
-      setCategory("FREE");
-      setTags("");
-
-      setTimeout(() => {
-        setSuccess(false);
-        onClose(true);
-      }, 1500);
-    } catch (err) {
-      const errorObj = err as {
-        response?: {
-          data?: { message?: string; error?: string };
-          status?: number;
-        };
-        message?: string;
-      };
-
-      const status = errorObj.response?.status;
-
-      if (status === 400) {
-        setError("입력 내용을 확인해주세요.");
-      } else if (status === 401) {
-        setError("로그인이 필요합니다.");
-      } else {
-        setError("게시글 작성에 실패했습니다. 잠시 후 다시 시도해주세요.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+const WritePost = ({ onClose, post }: WritePostProps) => {
+  const {
+    isEditMode,
+    title,
+    setTitle,
+    body,
+    setBody,
+    category,
+    setCategory,
+    tags,
+    setTags,
+    loading,
+    handleSubmit,
+    handleDelete,
+  } = usePostForm({ post, onClose });
 
   const [isMinimized, setIsMinimized] = useState(false);
+
+  const handleSubmitClick = () => {
+    const form = document.getElementById("post-form") as HTMLFormElement;
+    if (form) {
+      form.requestSubmit();
+    }
+  };
 
   return (
     <S.FloatingContainer $isMinimized={isMinimized}>
       <S.FloatingHeader>
-        <S.FloatingTitle>새 글 작성</S.FloatingTitle>
+        <S.FloatingTitle>
+          {isEditMode ? "글 수정하기" : "새 글 작성"}
+        </S.FloatingTitle>
         <S.FloatingActions>
+          {isEditMode && (
+            <S.HeaderDeleteButton
+              type="button"
+              onClick={handleDelete}
+              disabled={loading}
+            >
+              <Trash2 size={16} />
+            </S.HeaderDeleteButton>
+          )}
+          <S.HeaderSubmitButton
+            type="button"
+            onClick={handleSubmitClick}
+            disabled={loading}
+            title={isEditMode ? "게시글 수정" : "게시글 작성"}
+          >
+            <Check size={16} />
+          </S.HeaderSubmitButton>
           <S.IconButton onClick={() => setIsMinimized(!isMinimized)}>
             <Minus size={16} />
           </S.IconButton>
@@ -87,7 +69,7 @@ const WritePost = ({ onClose }: WritePostProps) => {
       </S.FloatingHeader>
       {!isMinimized && (
         <S.FloatingContent>
-          <S.Form onSubmit={handleSubmit}>
+          <S.Form id="post-form" onSubmit={handleSubmit}>
             <S.FormGroup>
               <S.Label htmlFor="title">제목</S.Label>
               <S.Input
@@ -102,17 +84,17 @@ const WritePost = ({ onClose }: WritePostProps) => {
             </S.FormGroup>
 
             <S.FormGroup>
-              <S.Label htmlFor="category">카테고리</S.Label>
-              <S.Select
-                id="category"
+              <Dropdown
+                label="카테고리"
                 value={category}
-                onChange={(e) => setCategory(e.target.value as PostCategory)}
+                onChange={(value) => setCategory(value as PostCategory)}
                 disabled={loading}
-              >
-                <option value="FREE">자유</option>
-                <option value="NOTICE">공지</option>
-                <option value="QNA">질문</option>
-              </S.Select>
+                options={[
+                  { value: "FREE", label: "자유" },
+                  { value: "NOTICE", label: "공지" },
+                  { value: "QNA", label: "질문" },
+                ]}
+              />
             </S.FormGroup>
 
             <S.FormGroup>
@@ -139,15 +121,6 @@ const WritePost = ({ onClose }: WritePostProps) => {
                 disabled={loading}
               />
             </S.FormGroup>
-
-            {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
-            {success && (
-              <S.SuccessMessage>게시글이 작성되었습니다!</S.SuccessMessage>
-            )}
-
-            <S.SubmitButton type="submit" disabled={loading}>
-              {loading ? "작성 중..." : "게시글 작성"}
-            </S.SubmitButton>
           </S.Form>
         </S.FloatingContent>
       )}
