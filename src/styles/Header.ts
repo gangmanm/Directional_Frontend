@@ -52,11 +52,23 @@ export const Logo = styled.h1`
   font-size: 20px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  font-weight: 600;
 
   ${media.tablet} {
     font-size: 24px;
-    gap: 10px;
+    gap: 12px;
+  }
+`;
+
+export const LogoImage = styled.img`
+  width: 32px;
+  height: 32px;
+  display: block;
+
+  ${media.tablet} {
+    width: 40px;
+    height: 40px;
   }
 `;
 

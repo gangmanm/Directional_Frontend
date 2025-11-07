@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import * as S from "../styles/Header";
-import { LayoutDashboard, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 
 interface HeaderProps {
   activeTab: string;
@@ -22,10 +22,8 @@ const Header = ({ activeTab, onTabChange }: HeaderProps) => {
       <S.HeaderContent>
         <S.LeftSection>
           <S.Logo>
+            <S.LogoImage src="/logo.svg" alt="Directional Logo" />
             Directional
-            <S.IconWrapper>
-              <LayoutDashboard />
-            </S.IconWrapper>
           </S.Logo>
           <S.MenuIconButton
             onClick={() => setIsMenuOpen(!isMenuOpen)}
