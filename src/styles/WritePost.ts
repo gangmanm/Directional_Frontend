@@ -107,6 +107,50 @@ export const HeaderDeleteButton = styled.button`
   }
 `;
 
+export const HeaderEditButton = styled.button`
+  background: #4dabf7;
+  color: #ffffff;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+export const HeaderBackButton = styled.button`
+  background: #999999;
+  color: #ffffff;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
 export const FloatingContent = styled.div`
   padding: 20px;
   overflow-y: auto;
@@ -340,5 +384,113 @@ export const DeleteButton = styled.button`
   &:disabled {
     opacity: 0.3;
     cursor: not-allowed;
+  }
+`;
+
+// View Mode Styles
+export const ViewContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
+`;
+
+export const ViewHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #333333;
+`;
+
+export const ViewTitle = styled.h2`
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  flex: 1;
+  word-break: break-word;
+
+  ${media.tablet} {
+    font-size: 24px;
+  }
+`;
+
+export const ViewCategoryBadge = styled.span<{ $category: string }>`
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: ${(props) => {
+    switch (props.$category) {
+      case "NOTICE":
+        return "#ff6b6b";
+      case "QNA":
+        return "#4dabf7";
+      case "FREE":
+        return "#51cf66";
+      default:
+        return "#999999";
+    }
+  }};
+  color: #000000;
+
+  ${media.tablet} {
+    font-size: 13px;
+    padding: 6px 16px;
+  }
+`;
+
+export const ViewInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #333333;
+`;
+
+export const ViewAuthor = styled.span`
+  font-size: 14px;
+  color: #b0b0b0;
+  font-weight: 500;
+`;
+
+export const ViewDate = styled.span`
+  font-size: 13px;
+  color: #666666;
+`;
+
+export const ViewTagList = styled.div`
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+`;
+
+export const ViewTag = styled.span`
+  padding: 6px 12px;
+  background: #2a2a2a;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #999999;
+
+  ${media.tablet} {
+    font-size: 13px;
+  }
+`;
+
+export const ViewBody = styled.div`
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
+
+  ${media.tablet} {
+    font-size: 16px;
   }
 `;
